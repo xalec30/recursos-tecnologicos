@@ -1,0 +1,107 @@
+body {
+  font-family: "Roboto";
+}
+
+.border-bottom {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+html[data-theme=dark] .border-bottom {
+  border-bottom: 1px solid rgba(243, 244, 246, 0.1490196078) !important;
+}
+html[data-theme=dark] .border-right {
+  border-right: 1px solid rgba(243, 244, 246, 0.1490196078) !important;
+}
+html[data-theme=dark] .separator .separator-text {
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  margin-left: -22px;
+  padding: 0px 10px;
+  background: #14161a;
+  color: white;
+}
+html[data-theme=dark] .tags-input {
+  background-color: rgba(243, 244, 246, 0.1490196078) !important;
+  border-color: rgba(243, 244, 246, 0.1490196078) !important;
+  color: white !important;
+}
+html[data-theme=dark] .tags-input .tag {
+  background-color: #14161a !important;
+}
+html[data-theme=dark] .tags-input input::-moz-placeholder {
+  color: white !important;
+}
+html[data-theme=dark] .tags-input input::placeholder {
+  color: white !important;
+}
+html[data-theme=dark] .tags-input .dropdown-content {
+  background-color: rgba(243, 244, 246, 0.1490196078) !important;
+}
+html[data-theme=dark] .tags-input .dropdown-content .dropdown-item {
+  color: white !important;
+}
+html[data-theme=dark] .tags-input .dropdown-content .dropdown-item:hover {
+  background-color: #14161a !important;
+}
+
+.border-right {
+  border-right: 1px solid #f3f4f6;
+}
+
+.vh-100 {
+  min-height: 100vh;
+}
+
+.container {
+  min-height: 100vh;
+}
+
+.separator {
+  margin: 20px 0;
+  border-top: 1px solid #CCCCCC;
+  position: relative;
+}
+.separator .separator-text {
+  display: block;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  margin-left: -22px;
+  padding: 0px 10px;
+  background: #FFFFFF;
+  color: #8a8a8a;
+}
+
+.notification .delete {
+  top: 1.5rem;
+}
+
+.rounded {
+  border-radius: 0.3rem;
+}
+
+.modal-card-head {
+  box-shadow: none !important;
+}
+
+td {
+  align-content: center;
+}
+
+.modal-card-foot {
+  justify-content: flex-end;
+}
+
+.box {
+  box-shadow: none !important;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.select {
+  width: 100%;
+}/*# sourceMappingURL=style.css.map */
