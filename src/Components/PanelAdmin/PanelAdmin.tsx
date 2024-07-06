@@ -6,7 +6,7 @@ import ItemMenu from "../ItemMenu/ItemMenu";
 export default function PanelAdmin(){
     
     const Auth = useAuth();
-    const [user,setUser] = useState(JSON.parse(Auth.user));
+    const user =  JSON.parse(Auth.user);
 
     return(
         <aside className="column is-one-fifth menu p-3 border-right">
