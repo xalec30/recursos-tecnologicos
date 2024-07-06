@@ -113,10 +113,42 @@ td{
     box-shadow: none !important;
 }
 
+.card{
+    box-shadow: none !important;
+}
+
 .w-100{
     width: 100%;
 }
 
+.w-50{
+    width: 50%;
+}
+
 .select{
     width: 100%;
+}
+.content-description{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.button-comment{
+    cursor: pointer;
+    color:#ffb70f
+}
+
+.button-like{
+    cursor: pointer;
+    color:#ff6685
+}
+
+.card-resource{
+
+    &:hover{
+        animation: pulse;
+        animation-duration: 2s; 
+    }
 }

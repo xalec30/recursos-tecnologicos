@@ -6,7 +6,8 @@ import ThemeContextProvider from './Provider/ThemeProvider';
 
 //bulma and style
 import 'bulma/css/bulma.min.css';
-import '@creativebulma/bulma-tagsinput/dist/css/bulma-tagsinput.min.css'
+import '@creativebulma/bulma-tagsinput/dist/css/bulma-tagsinput.min.css';
+import 'animate.css';
 import './assets/css/style.css';
 
 //font source

@@ -25,10 +25,16 @@ export default function CategoriesList(){
                 <p className="pb-2 has-text-centered">Categorias</p>
                 <ul className="menu-list">
 
-                    {
-                        categories.map<any>((category:any) => {
-                            return <ItemMenu key={category.id} name={category.name} href={'/category/' + category.name} />
-                        })
+                    {   
+                        (categories.length > 0 ) ? 
+
+                            categories.map<any>((category:any) => {
+                                return <ItemMenu key={category.id} name={category.name} href={'/category/' + category.name} />
+                            })
+
+                        :
+
+                        <li>No existen categorias</li>
                     }
 
                 </ul>
