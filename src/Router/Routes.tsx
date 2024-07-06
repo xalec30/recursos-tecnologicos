@@ -41,10 +41,6 @@ const router = createBrowserRouter([
         element: <About/>
     },
     {
-        path: '*',
-        element: <NotFound/>  
-    },
-    {
         path:'/account/',
         element: <LoginGuards/>,
         children: [
@@ -99,7 +95,11 @@ const router = createBrowserRouter([
             {
                 path: 'resources',
                 element: <Resource/>
-            }
+            },
+            {
+                path: '*',
+                element: <NotFound/>  
+            },
         ]
     }
 ]);
