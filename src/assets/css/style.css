@@ -1,5 +1,6 @@
 body {
   font-family: "Roboto";
+  overflow: hidden;
 }
 
 .border-bottom {
@@ -134,4 +135,8 @@ td {
 .card-resource:hover {
   animation: pulse;
   animation-duration: 2s;
+}
+
+.modal-card .modal-card-body {
+  scrollbar-width: thin;
 }/*# sourceMappingURL=style.css.map */

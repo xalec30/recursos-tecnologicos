@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
-export default function CardResource(){
+export default function CardResource({eventModal}:any){
     
     return(
         <div className="column is-one-third-desktop is-full-mobile">
@@ -33,7 +33,7 @@ export default function CardResource(){
                                 <p>Itch.io, también conocida como Itch.io, es una plataforma en línea que permite a los usuarios subir, distribuir y descargar videojuegos de forma gratuita o con un precio determinado por el desarrollador</p>
                             </div>
                             <div className="w-100 mt-1">
-                                <button className="button is-ghost p-0">Ver mas</button>
+                                <button data-name="Itchio" onClick={() => eventModal()} data-short-description="short description" className="button is-ghost p-0">Ver mas</button>
                             </div>
                         </div>
                     </div>
