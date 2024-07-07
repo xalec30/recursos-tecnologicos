@@ -11,7 +11,7 @@ export default function About(){
     return (
         <>
             <Navbar hiddenButtonsAuth={1} />
-            <div className="container">
+            <div className="container p-4">
                 <div className="columns is-multiline is-mobile mt-4">
                     <div className="column is-12">
                         <h1 className="title">Acerca del proyecto</h1>

@@ -11,7 +11,7 @@ export default function Overview(){
 
 
     return(
-        <main className={(theme.theme == "light") ? "column is-four-fifths-desktop has-background-light pb-4 vh-100 is-full-mobile mt-4" : 'column is-four-fifths-desktop vh-100 has-background-dark pb-4 is-full-mobile mt-4'}>
+        <main className={(theme.theme == "light") ? "column is-four-fifths-desktop has-background-light pb-4 vh-100 is-full-mobile" : 'column is-four-fifths-desktop vh-100 has-background-dark pb-4 is-full-mobile '}>
             <div className="columns is-multiline p-3">
                 <div className='column is-12 mt-4'>
                     <div className="tags are-large">

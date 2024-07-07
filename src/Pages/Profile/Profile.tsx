@@ -116,7 +116,7 @@ export default function Profile(){
     }
 
     return(
-       <main className={(theme.theme == "light") ? "container is-fluid is-background-light" : 'container is-fluid is-background-dark'}>
+       <main className={(theme.theme == "light") ? "container is-fluid is-background-light vh-100 p-1" : 'container is-fluid is-background-dark vh-100 p-1'}>
             <div className="column is-6">
                 <div className="tags are-large">
                     <span className="tag">Perfil</span>

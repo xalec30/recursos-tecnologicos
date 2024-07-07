@@ -117,14 +117,14 @@ export default function Navbar({hiddenButtonsAuth}:NavbarProps){
                 <nav className="navbar border-bottom">
                     <div className="navbar-brand">
                         <Link className="navbar-item" to={"/"}>TecnoHub</Link>
-                        <a role="button" id="navbar-burguer" className="navbar-burger" aria-label="menu" data-target="navbarmenu" aria-expanded="false">
+                        <a role="button" onClick={() => toggleNav()} className={(toggleBurguer) ? 'navbar-burger is-active' : "navbar-burger"} aria-label="menu" data-target="navbarmenu" aria-expanded="false">
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                             <span aria-hidden="true"></span>
                         </a>
                     </div>
-                    <div id="navbarmenu" className="navbar-menu">
+                    <div className={(toggleBurguer) ? "navbar-menu is-active" : 'navbar-menu'}>
                         <div className="navbar-start">
                             <Link className="navbar-item has-text-weight-medium" to={"/"}>Inicio</Link>
                             <Link className="navbar-item has-text-weight-medium" to={"/about"}>Acerca de proyecto</Link>

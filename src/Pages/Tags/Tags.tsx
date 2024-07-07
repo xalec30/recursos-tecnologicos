@@ -74,7 +74,7 @@ export default function Tags(){
     },[])
 
     return (
-        <main className={(theme.theme == "light") ? "column has-background-light pb-4" : 'column has-background-dark pb-4'}>
+        <main className={(theme.theme == "light") ? "column has-background-light pb-4 vh-100" : 'column has-background-dark pb-4 vh-100'}>
             <div className="column is-6">
                 <div className="tags are-large">
                     <span className="tag">Etiquetas</span>

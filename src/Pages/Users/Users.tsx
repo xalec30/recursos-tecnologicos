@@ -106,7 +106,7 @@ export default function Users(){
     }
 
     return(
-        <main className={(theme.theme == "light") ? "column has-background-light pb-4" : 'column has-background-dark pb-4'}>
+        <main className={(theme.theme == "light") ? "column has-background-light pb-4 vh-100" : 'column has-background-dark pb-4 vh-100'}>
             <div className="column is-6">
                 <div className="tags are-large">
                     <span className="tag">Usuarios Registrados</span>
@@ -116,63 +116,65 @@ export default function Users(){
                 <div className={(viewNotification) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>Usuario Eliminado</div>
             </div>
             <div className="column is-12">
-                <table className="table is-fullwidth rounded">
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Nombre y Apellido</th>
-                            <th>Correo</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            (users.length > 0) ? 
+                <div className="table-container rounded">
+                    <table className="table is-fullwidth rounded">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Nombre y Apellido</th>
+                                <th>Correo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                (users.length > 0) ? 
 
-                                users.map((user:any,index:number) => {
-                                        return(
-                                            <tr key={user.id} id={'user_' + user.id}>
-                                                <td>{user.username}</td>
-                                                <td>{user.name + ' ' + user.last_name}</td>
-                                                <td>{user.email}</td>
-                                                { (user.id == AuthUser.id) ? 
-                                                    <td>
-                                                        <button ref={(e) => buttonsAction.current.push(e)} className="button m-1 is-success has-text-white" data-user={JSON.stringify(user)} onClick={(e) => openModalView(e)}>
-                                                            <FontAwesomeIcon icon={faEye} />
-                                                        </button>
-                                                    </td>
-                                                :
-                                                    <td>
-                                                       
-                                                        <button data-status={user.status} key={(index)} ref={(e) => buttonsAction.current.push(e)} data-id={user.id} onClick={() => HandleblockUser(index)} className={ (user.status == 1) ? "button is-danger has-text-white m-1" : 'button is-success has-text-white m-1'}>
-                                                            {
-                                                                (user.status == 1) ? 
-                                                                <FontAwesomeIcon icon={faBan} />
-                                                                :
-                                                                <FontAwesomeIcon icon={faFlag} />
-                                                            }
-                                                            
-                                                        </button>
-                                                        <button className="button is-success has-text-white m-1" data-user={JSON.stringify(user)} onClick={(e) => openModalView(e)}>
-                                                            <FontAwesomeIcon icon={faEye} />
-                                                        </button>
-                                                        <button data-id={user.id} onClick={(e) => openModalDelete(e)} className="button is-danger has-text-white m-1">
-                                                            <FontAwesomeIcon icon={faTrash} />
-                                                        </button>
-                                                    </td>
-                                                }
-                                                
-                                            </tr>
-                                        ) 
-                                })
-                            : (
-                                <tr>
-                                    <td colSpan={4} className="has-text-centered">No existen usuarios registrados.</td>
-                                </tr>
-                            )
-                        }
-                    </tbody>
-                </table>
+                                    users.map((user:any,index:number) => {
+                                            return(
+                                                <tr key={user.id} id={'user_' + user.id}>
+                                                    <td>{user.username}</td>
+                                                    <td>{user.name + ' ' + user.last_name}</td>
+                                                    <td>{user.email}</td>
+                                                    { (user.id == AuthUser.id) ? 
+                                                        <td>
+                                                            <button ref={(e) => buttonsAction.current.push(e)} className="button m-1 is-success has-text-white" data-user={JSON.stringify(user)} onClick={(e) => openModalView(e)}>
+                                                                <FontAwesomeIcon icon={faEye} />
+                                                            </button>
+                                                        </td>
+                                                    :
+                                                        <td>
+                                                        
+                                                            <button data-status={user.status} key={(index)} ref={(e) => buttonsAction.current.push(e)} data-id={user.id} onClick={() => HandleblockUser(index)} className={ (user.status == 1) ? "button is-danger has-text-white m-1" : 'button is-success has-text-white m-1'}>
+                                                                {
+                                                                    (user.status == 1) ? 
+                                                                    <FontAwesomeIcon icon={faBan} />
+                                                                    :
+                                                                    <FontAwesomeIcon icon={faFlag} />
+                                                                }
+                                                                
+                                                            </button>
+                                                            <button className="button is-success has-text-white m-1" data-user={JSON.stringify(user)} onClick={(e) => openModalView(e)}>
+                                                                <FontAwesomeIcon icon={faEye} />
+                                                            </button>
+                                                            <button data-id={user.id} onClick={(e) => openModalDelete(e)} className="button is-danger has-text-white m-1">
+                                                                <FontAwesomeIcon icon={faTrash} />
+                                                            </button>
+                                                        </td>
+                                                    }
+                                                    
+                                                </tr>
+                                            ) 
+                                    })
+                                : (
+                                    <tr>
+                                        <td colSpan={4} className="has-text-centered">No existen usuarios registrados.</td>
+                                    </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <ModalViewUser username={username} firstName={firstName} middleName={middleName} lastName={lastName} email={email} open={viewDetail} changeOpen={closeModalView}/>
             <ModalDelete open={viewDelete} deleteFunction={deleteUser} changeOpen={closeModalDelete} title="Eliminar Usuario" id={userId} description="Desea eliminar este usuario?" />

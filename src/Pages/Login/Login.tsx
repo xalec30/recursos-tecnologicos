@@ -83,7 +83,7 @@ export default function Login(){
     return(
         <>
             <Navbar hiddenButtonsAuth={0} />
-            <div className="container pt-4">
+            <div className="container p-4">
                 <div className="columns is-centered">
                     <div className="column is-6 has-text-centered mt-4">
                         <h2 className="subtitle is-2">Iniciar Sesi&oacute;n</h2>
