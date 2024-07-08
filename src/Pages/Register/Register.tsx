@@ -7,6 +7,7 @@ import { changeTitleHeader } from "../../Utils/utils";
 import codeigniter from "../../Utils/axios";
 
 import Navbar from "../../Components/Navbar/Navbar"
+import Footer from "../../Components/Footer/Footer";
 
 export default function Register(){
 
@@ -236,6 +237,7 @@ export default function Register(){
                     <section className="column is-12 p-4"></section>
                 </div>
             </div>
+            <Footer/>
         </>
     )
 }

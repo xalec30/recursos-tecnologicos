@@ -7,6 +7,7 @@ import { changeTitleHeader } from "../../Utils/utils";
 import codeigniter from "../../Utils/axios";
 
 import Navbar from "../../Components/Navbar/Navbar";
+import Footer from "../../Components/Footer/Footer";
 
 export default function Login(){
 
@@ -130,6 +131,7 @@ export default function Login(){
                     </section>
                 </div>
             </div>
+            <Footer/>
         </>
     )
 }
