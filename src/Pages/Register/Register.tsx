@@ -29,36 +29,43 @@ export default function Register(){
     const handleUsername = (e:any) => {
         setUsername(e.target.value);
         setErrorRegister("");
+       
     }
 
     const handleFirstName = (e:any) => {
         setFirstName(e.target.value);
         setErrorRegister("");
+      
     }
 
     const handleMiddleName = (e:any) => {
         setMiddleName(e.target.value);
         setErrorRegister("");
+      
     }
 
     const handleLastName = (e:any) => {
         setLastName(e.target.value);
         setErrorRegister("");
+       
     }
 
     const handlePassword = (e:any) => {
         setPassword(e.target.value);
         setErrorRegister("");
+        
     }
 
     const handleRepeatPassword = (e:any) => {
         setRepeatPassword(e.target.value);
         setErrorRegister("");
+        
     }
 
     const handleEmail = (e:any) => {
         setEmail(e.target.value);
         setErrorRegister("");
+       
     }
 
     const closeNotification = () => {
@@ -135,6 +142,7 @@ export default function Register(){
                 }
 
                 setErrorRegister(message);
+                setButtonLoading(0);
             }
         })
 
