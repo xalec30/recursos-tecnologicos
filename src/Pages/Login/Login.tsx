@@ -58,6 +58,15 @@ export default function Login(){
             'username': username,
             'password': password
         }).then((response) => {
+
+            let user = response.data.user_data;
+    
+            if(user.status == 2){
+                setErrorAuth("Usuario Bloqueado");
+                setButtonLoading(0);
+                return;
+            }
+            
             localStorage.setItem('token','1');
             localStorage.setItem('user',JSON.stringify(response.data.user_data));
             Auth.login();
@@ -67,9 +76,9 @@ export default function Login(){
             }else{
                 navigate("/");
             }
-            
-        
+
             return;
+            
         }).catch(function (error) {
 
             if(error.response){
