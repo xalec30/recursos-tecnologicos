@@ -21,6 +21,7 @@ export default function Register(){
     const [buttonLoading,setButtonLoading] = useState(0);
     const [errorRegister,setErrorRegister] = useState<String>("");
     const [successRegister,setSuccessRegister] = useState<String>("");
+    const [licenseAgreement,setLicenseAgreement] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -66,7 +67,10 @@ export default function Register(){
     const handleEmail = (e:any) => {
         setEmail(e.target.value);
         setErrorRegister("");
-       
+    }
+
+    const handlerLicenseAgreement = () => {
+        
     }
 
     const closeNotification = () => {
@@ -221,6 +225,12 @@ export default function Register(){
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faLock} />
                                     </span>
+                                </div>
+                            </div>
+                            <div className="field mt-4">
+                                <div className="field">
+                                    <input className="is-checkradio" type="checkbox" name="exampleCheckbox" />
+                                    <label><a>Accept the license agreement</a></label>
                                 </div>
                             </div>
                             <div className="field mt-2">

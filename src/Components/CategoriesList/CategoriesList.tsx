@@ -41,7 +41,10 @@ export default function CategoriesList(){
                         (categories.length > 0 ) ? 
 
                             categories.map<any>((category:any) => {
-                                return <ItemMenu key={category.id} name={category.name} href={'/category/' + category.name} />
+
+                                let name = category.name;
+
+                                return <ItemMenu key={category.id} name={category.name} href={'/category/' + name.toLowerCase()} />
                             })
 
                         :

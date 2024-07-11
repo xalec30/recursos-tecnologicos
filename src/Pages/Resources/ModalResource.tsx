@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import codeigniter from "../../Utils/axios";
 import BulmaTagsInput from '@creativebulma/bulma-tagsinput';
+import { isValidUrl } from "../../Utils/utils";
 
 
 export default function ModalAddResource({open,title,changeOpen,titleButton,id,name,url,description,shortDescription,category,tagsList}:any){
@@ -14,7 +15,9 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
     const [resourceName,setResourceName] = useState("");
     const [resourceUrl,setResourceUrl] = useState("");
     const [resourceDescription,setResourceDescription] = useState("");
+
     const [resourceShortDescription,setResourceShortDescription] = useState("");
+    const [resourceShortDescriptionCount,setResourceShortDescriptionCount] = useState(0);
     const [resourceCategory,setResourceCategory] = useState(0); 
     const [resourceTags,setResourceTags] = useState<any[]>([]);
 
@@ -104,9 +107,16 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
         }
 
         if(!resourceUrl){
-            setNotificationError("Campo Url es requerido");
+            setNotificationError("Campo URL es requerido");
             setButtonisLoading(false);
             return;
+        }else{
+
+            if(!isValidUrl(resourceUrl)){
+                setNotificationError("URL no es valido");
+                setButtonisLoading(false);
+                return;
+            }
         }
 
         if(!resourceShortDescription){
@@ -195,8 +205,19 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
     }
 
     const handlerShortDescription = (e:any) => {
+        let shortDescription = e.currentTarget.value;
         setNotificationError("");
-        setResourceShortDescription(e.currentTarget.value);
+        setResourceShortDescription(prevState => {
+
+            let description = (shortDescription.length > 150) ? prevState : shortDescription;
+            return description;
+        });
+        setResourceShortDescriptionCount(prevState => {
+            let count = (shortDescription.length > 150) ? prevState : shortDescription.length; 
+            return count;
+        });
+
+        return;
     }
 
     const handlerCategory = (e:any) => {
@@ -230,13 +251,14 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
                         <div className="field mt-4">
                             <label className="label">URL<span className="has-text-danger">*</span></label>
                             <div className="control">
-                                <input className="input" value={resourceUrl} onChange={(e) => handlerUrl(e)}  type="text" placeholder="" />
+                                <input className="input" value={resourceUrl} onChange={(e) => handlerUrl(e)}  type="text" placeholder="https://example.com" />
                             </div>
                         </div>
                         <div className="field mt-4">
                             <label className="label">Descripcion Corta<span className="has-text-danger">*</span></label>
                             <div className="control">
                                 <textarea className="textarea" value={resourceShortDescription} onChange={(e) => handlerShortDescription(e)} style={{resize:"none"}} placeholder=""></textarea>
+                                <span>{resourceShortDescriptionCount} /150</span>
                             </div>
                         </div>
                         <div className="field mt-4">

@@ -6,6 +6,7 @@ import ThemeContextProvider from './Provider/ThemeProvider';
 
 //bulma and style
 import '@creativebulma/bulma-tagsinput/dist/css/bulma-tagsinput.min.css';
+import 'bulma-checkradio/dist/css/bulma-checkradio.min.css';
 import 'bulma/css/bulma.min.css';
 import 'animate.css';
 import './assets/css/style.css';

@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
-export default function CardResource({eventModal}:any){
+export default function CardResource({eventModal,name,shortDescription,description,url}:any){
     
     return(
         <div className="column is-one-third-desktop is-full-mobile">
             <div className="card card-resource pulse">
                 <div className="card-image">
-                    <a target="_blank" href="https://polyhaven.com/">
+                    <a target="_blank" href={url}>
                         <figure className="image is-3by2">
                             <img src={placeholder} />
                         </figure>
@@ -19,7 +19,7 @@ export default function CardResource({eventModal}:any){
                     <div className="content">
                         <div className="content-description">
                             <div className="w-50">
-                                <h6 className="mb-0">Itchio</h6>
+                                <h6 className="mb-0">{name}</h6>
                             </div>
                             <div className="w-50 has-text-right">
                                 <span className="p-1 button-like">
@@ -30,10 +30,10 @@ export default function CardResource({eventModal}:any){
                                 </span>
                             </div>
                             <div className="w-100 mt-2">
-                                <p>Itch.io, también conocida como Itch.io, es una plataforma en línea que permite a los usuarios subir, distribuir y descargar videojuegos de forma gratuita o con un precio determinado por el desarrollador</p>
+                                <p>{shortDescription}</p>
                             </div>
                             <div className="w-100 mt-1">
-                                <button data-name="Itchio" onClick={() => eventModal()} data-short-description="short description" className="button is-ghost p-0">Ver mas</button>
+                                <button data-name={name} data-url={url} data-short-description={shortDescription} data-description={description} onClick={(e) => eventModal(e)} className="button is-ghost p-0">Ver mas</button>
                             </div>
                         </div>
                     </div>
