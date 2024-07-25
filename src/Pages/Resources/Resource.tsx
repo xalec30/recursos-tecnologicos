@@ -12,6 +12,7 @@ import ModalAddResource from "./ModalResource";
 export default function Resource(){
 
     const theme = useTheme();
+    const [page,setPage] = useState<number>(1);
     const [viewNotification,setNotification] = useState(false);
     const [viewDelete,setViewDelete] = useState(false);
     const [id,setId] = useState<number>(0);
@@ -25,16 +26,17 @@ export default function Resource(){
     const [titleModal,setTitleModal] = useState("");
     const [titleButton,setTitleButton] = useState("");
     const [tags,setTags] = useState([]);
+    const [imageUrl,setImageUrl] = useState<string>();
 
 
-    const getResources = async() => {
-        await codeigniter.get('/assets').then((response) => {
+    const getResources = async(page:number) => {
+        await codeigniter.get('/assets?page=' + page).then((response) => {
             setResources(response.data);
         })
     }
 
     useEffect(() => {
-        getResources();
+        getResources(page);
         changeTitleHeader('Recursos');
     },[]);
 
@@ -42,7 +44,7 @@ export default function Resource(){
     const deleteResource = async(id:number) => {
 
         await codeigniter.delete('/assets/' + id).then(() => {
-            getResources();
+            getResources(page);
             setNotification(true);
             setViewDelete(false);
 
@@ -65,6 +67,7 @@ export default function Resource(){
         setDescription("");
         setCategory(0);
         setTags([]);
+        setImageUrl("");
         setShortDescription("");
 
         setModal(true);
@@ -73,6 +76,12 @@ export default function Resource(){
     const closeModal = () => {
         setModal(false);
     }
+
+    const refreshResources = () => {
+
+        setModal(false);
+        getResources(page);
+    } 
 
     const openModalUpdateResource = (e:any) => {
 
@@ -85,12 +94,29 @@ export default function Resource(){
         setShortDescription(e.currentTarget.getAttribute('data-short-description'));
         setCategory(e.currentTarget.getAttribute('data-category'));
         setTags(JSON.parse(e.currentTarget.getAttribute('data-tags')));
+        setImageUrl(e.currentTarget.getAttribute('data-image'));
         setModal(true);
     }
 
     const openModalDelete = (e:any) => {
         setId(e.currentTarget.getAttribute('data-id'));
         setViewDelete(true);
+    }
+
+    const nextPage = () => {
+        setPage(prevState => {
+            prevState += 1;
+            getResources(prevState);
+            return prevState;
+        })
+    }
+
+    const previousPage = () => {
+        setPage(prevState => {
+            prevState -= 1;
+            getResources(prevState);
+            return prevState;
+        })
     }
 
     return(
@@ -107,10 +133,14 @@ export default function Resource(){
                 <div className={(viewNotification) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>Categoria Eliminada</div>
             </div>
             <div className="column is-12">
-                <table className="table is-fullwidth rounded">
+                <span>Pagina {page}</span>
+            </div>
+            <div className="column is-12">
+                <table className="table is-fullwidth is-bordered">
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Categoria</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -123,8 +153,9 @@ export default function Resource(){
                                     return(
                                         <tr key={resource.id} id={'reosurce_' + resource.id}>
                                             <td>{resource.name}</td>
+                                            <td>{resource.category_name}</td>
                                             <td>
-                                                <button onClick={(e) => openModalUpdateResource(e)} data-id={resource.id} data-name={resource.name} data-url={resource.url} data-short-description={resource.short_description} data-description={resource.description} data-category={resource.category} data-tags={JSON.stringify(resource.tags)} className="button is-success mr-3 has-text-white">
+                                                <button onClick={(e) => openModalUpdateResource(e)} data-id={resource.id} data-image={resource.image} data-name={resource.name} data-url={resource.url} data-short-description={resource.short_description} data-description={resource.description} data-category={resource.category} data-tags={JSON.stringify(resource.tags)} className="button is-success mr-3 has-text-white">
                                                     <FontAwesomeIcon icon={faPenToSquare} />
                                                 </button>
                                                 <button className="button is-danger has-text-white" data-id={resource.id} onClick={(e) => openModalDelete(e)}>
@@ -136,14 +167,20 @@ export default function Resource(){
                                 })
                             : (
                                 <tr>
-                                    <td colSpan={2} className="has-text-centered">No existen Recursos registradas.</td>
+                                    <td colSpan={3} className="has-text-centered">No existen Recursos registradas.</td>
                                 </tr>
                             )
                         }
                     </tbody>
                 </table>
             </div>
-            <ModalAddResource titleButton={titleButton} name={name} url={url} id={id} description={description} shortDescription={shortDescription} category={category} tagsList={tags} title={titleModal} open={openModal} changeOpen={closeModal}/>
+            <div className="column is-12">
+                <div className="buttons is-justify-content-flex-end">
+                    <button className={(page > 1) ? "button is-link" : 'button is-link is-hidden'} disabled={(page == 1) ? true : false } onClick={() => previousPage()}>Anterior</button>
+                    <button className={(resources.length >= 10) ? "button is-link" : 'button is-link is-hidden'} disabled={(resources.length == 10 ) ? false : true} onClick={() => nextPage()}>Siguiente</button>
+                </div>
+            </div>
+            <ModalAddResource titleButton={titleButton} refresh={refreshResources} name={name} url={url} id={id} description={description} shortDescription={shortDescription} category={category} tagsList={tags} imageUrl={imageUrl} title={titleModal} open={openModal} changeOpen={closeModal}/>
             <ModalDelete open={viewDelete} deleteFunction ={deleteResource} changeOpen={closeModalDelete} title="Eliminar Recurso" id={id} description="Desea eliminar este recurso?" />
         </main>
     )

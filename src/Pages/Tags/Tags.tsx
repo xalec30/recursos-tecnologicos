@@ -11,6 +11,7 @@ import ModalDelete from "../../Components/ModalDelete/ModalDelete";
 export default function Tags(){
 
     const theme = useTheme();
+    const [page,setPage] = useState<number>(1);
     const [tags,setTags] = useState([]);
     const [titleModal,setTitleModal] = useState("");
     const [openModal,setModal] = useState(false);
@@ -20,9 +21,9 @@ export default function Tags(){
     const [id,setId] = useState<number>(0);
     const [tagName,setTagName] = useState("");
 
-    const getTags = async() => {
+    const getTags = async(page:number) => {
 
-        await codeigniter.get('/tags').then((response) => {
+        await codeigniter.get('/tags?page=' + page).then((response) => {
             setTags(response.data);
         })
     }
@@ -58,7 +59,7 @@ export default function Tags(){
     const deleteTag = async() => {
    
         await codeigniter.delete('/tags/' + id ).then(() => {
-            getTags();
+            getTags(page);
             setNotification(true);
             setViewDelete(false);
 
@@ -70,8 +71,25 @@ export default function Tags(){
 
     useEffect(() => {
         changeTitleHeader('Etiquetas');
-        getTags();
+        getTags(page);
     },[])
+
+    const nextPage = () => {
+        setPage(prevState => {
+            prevState += 1;
+            getTags(prevState);
+            return prevState;
+        })
+    }
+
+    const previousPage = () => {
+        setPage(prevState => {
+            prevState -= 1;
+            getTags(prevState);
+            return prevState;
+        })
+    }
+
 
     return (
         <main className={(theme.theme == "light") ? "column has-background-light pb-4 vh-100" : 'column has-background-dark pb-4 vh-100'}>
@@ -87,7 +105,10 @@ export default function Tags(){
                 <div className={(viewNotification) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>Etiqueta Eliminada</div>
             </div>
             <div className="column is-12">
-                <table className="table is-fullwidth rounded">
+                <span>Pagina {page}</span>
+            </div>
+            <div className="column is-12">
+                <table className="table is-fullwidth is-bordered">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -122,6 +143,12 @@ export default function Tags(){
                         }
                     </tbody>
                 </table>
+            </div>
+            <div className="column is-12">
+                <div className="buttons is-justify-content-flex-end">
+                    <button className={(page > 1) ? "button is-link" : 'button is-link is-hidden'} disabled={(page == 1) ? true : false } onClick={() => previousPage()}>Anterior</button>
+                    <button className={(tags.length >= 10) ? "button is-link" : 'button is-link is-hidden'} disabled={(tags.length == 10 ) ? false : true} onClick={() => nextPage()}>Siguiente</button>
+                </div>
             </div>
             <ModalTag id={id} title={titleModal} tagName={tagName} open={openModal} changeOpen={closeModal} titleButton={titleButton} />
             <ModalDelete open={viewDelete} deleteFunction ={deleteTag} changeOpen={closeModalDelete} title="Eliminar Etiqueta" id={id} description="Desea eliminar esta etiqueta?" />

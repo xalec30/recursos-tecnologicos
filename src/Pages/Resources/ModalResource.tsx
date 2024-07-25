@@ -2,9 +2,12 @@ import { useState,useEffect } from "react";
 import codeigniter from "../../Utils/axios";
 import BulmaTagsInput from '@creativebulma/bulma-tagsinput';
 import { isValidUrl } from "../../Utils/utils";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload,faXmark } from '@fortawesome/free-solid-svg-icons';
+import placeholder from "../../assets/img/placeholder.webp";
 
 
-export default function ModalAddResource({open,title,changeOpen,titleButton,id,name,url,description,shortDescription,category,tagsList}:any){
+export default function ModalAddResource({open,refresh,title,changeOpen,titleButton,id,name,url,description,shortDescription,category,tagsList,imageUrl}:any){
 
     const [resourceId,setResourceId] = useState(0);
     const [notificationError,setNotificationError] = useState<any>("");
@@ -13,30 +16,33 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
     const [categories,setCategories] = useState([]);
     const [tags,setTags] = useState([]);
     const [resourceName,setResourceName] = useState("");
+    const [resourceNameCount,setResourceNameCount] = useState(0);
     const [resourceUrl,setResourceUrl] = useState("");
     const [resourceDescription,setResourceDescription] = useState("");
-
     const [resourceShortDescription,setResourceShortDescription] = useState("");
     const [resourceShortDescriptionCount,setResourceShortDescriptionCount] = useState(0);
     const [resourceCategory,setResourceCategory] = useState(0); 
     const [resourceTags,setResourceTags] = useState<any[]>([]);
+    const [fileImage,setFileImage] = useState<any>();
+    const [fileImagePreview,setFileImagePreview] = useState<string>();
+    const [isFile,setIsFile] = useState(0);
 
-    const getCategories = async() => {
+    const getCategories = async(page:number) => {
         
-        await codeigniter.get('/categories').then((response) => {
+        await codeigniter.get('/categories?page=' + page).then((response) => {
             setCategories(response.data);
         })
     }
 
     const getTags = async() => {
 
-        await codeigniter.get('/tags').then((response) => {
+        await codeigniter.get('/tags?page=-1').then((response) => {
             setTags(response.data);
         })
     }
 
     useEffect(() => {
-        getCategories();
+        getCategories(-1);
         getTags();
         setTimeout(() => {
             BulmaTagsInput.attach('#select-tag');
@@ -74,31 +80,48 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
 
     useEffect(() => {
 
+        setNotificationError("");
+        setNotificationSuccess("");
+
 
         if(name == ""){
             setResourceId(0);
             setResourceName("");
+            setResourceNameCount(0);
             setResourceUrl("");
             setResourceDescription("");
             setResourceShortDescription("");
+            setResourceShortDescriptionCount(0);
             setResourceCategory(0);
+            setFileImagePreview(placeholder);
+            setIsFile(0)
+            
         }else{
             setResourceId(id);
             setResourceName(name);
+            setResourceNameCount(name.length);
             setResourceUrl(url);
             setResourceDescription(description);
             setResourceShortDescription(shortDescription);
+            setResourceShortDescriptionCount(shortDescription.length);
             setResourceCategory(category);
-            setTagsResource(tagsList);    
+            setTagsResource(tagsList);
+            if(imageUrl){
+                setFileImagePreview(imageUrl);
+                setIsFile(1)
+            }else{
+                setFileImagePreview(placeholder);
+                setIsFile(0);
+            }
         
         }
 
-    },[name]);
+    },[open]);
 
     const updateResource = async() => {
+
         setButtonisLoading(true);
         setNotificationError("");
-        console.log(resourceId);
 
         if(!resourceName){
             setNotificationError("Campo nombre es requerido");
@@ -119,79 +142,67 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
             }
         }
 
-        if(!resourceShortDescription){
-            setNotificationError("Campo Descripciòn corta es requerido");
-            setButtonisLoading(false);
-            return;
-        }
-
-        if(!resourceDescription){
-            setNotificationError("Campo Descripciòn es requerido");
-            setButtonisLoading(false);
-            return;
-        }
+        let formData = new FormData();
+        formData.append('id',resourceId.toString());
+        formData.append('image',fileImage);
+        formData.append('name',resourceName);
+        formData.append('url',resourceUrl);
+        formData.append('short_description',resourceShortDescription);
+        formData.append('description',resourceDescription);
+        formData.append('category',resourceCategory.toString());
+        formData.append('tags',resourceTags.toString());
+        formData.append('isImage',isFile.toString());
 
         //create
-        if(resourceId == 0){
-
-            await codeigniter.post('/assets',{
-                'name' : resourceName,
-                'url': resourceUrl,
-                'short_description' : resourceShortDescription,
-                'description': resourceDescription,
-                'category' : resourceCategory,
-                'tags': resourceTags 
-            }).then(() => {
-                setNotificationSuccess('Categoria creada');
-                setTimeout(() => {
-                  setNotificationSuccess("");
-                  window.location.reload();
-      
-                },1000);
-                return;
-            }).catch((error) => {
-      
-                if(error.response){
-                  let errors = error.response.data.messages;
-                  setNotificationError(Object.values(errors)[0]);
-                  setButtonisLoading(false);
-                }
-            });
-
-        //update
-        }else{
-
-            await codeigniter.put('/assets/' + resourceId,{
-                'name' : resourceName,
-                'url': resourceUrl,
-                'short_description' : resourceShortDescription,
-                'description': resourceDescription,
-                'category' : resourceCategory,
-                'tags': resourceTags 
-            }).then(() => {
-                setNotificationSuccess('Recurso actualizado');
+        
+        await codeigniter.post('/assets',formData,{
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }).then((response:any) => {
+            
+            setNotificationSuccess(response.data.message);
+            
+            setTimeout(() => {
+                setNotificationSuccess("");
+                setButtonisLoading(false);
+                setResourceId(0);
+                setResourceName("");
+                setResourceNameCount(0);
+                setResourceUrl("");
+                setResourceDescription("");
+                setResourceShortDescription("");
+                setResourceShortDescriptionCount(0);
+                setResourceCategory(0);
+                setFileImagePreview(placeholder);
+                setIsFile(0)
                 
-                setTimeout(() => {
-                  setNotificationSuccess("");
-                  window.location.reload();
-      
-                },1000);
-                return;
-              }).catch((error) => {
-      
-                if(error.response){
-                  let errors = error.response.data.messages;
-                  setNotificationError(Object.values(errors)[0]);
-                 
-                  setButtonisLoading(false);
-                }
-              });
-        }
+               refresh();
+            },1000);
+            return;
+            
+        }).catch((error) => {
+    
+            if(error.response){
+                let errors = error.response.data.messages;
+                setNotificationError(Object.values(errors)[0]);
+                setButtonisLoading(false);
+            }
+        });
     }
 
     const handlerName = (e:any) => {
+
+        let ResourceName = e.currentTarget.value;
         setNotificationError("");
-        setResourceName(e.currentTarget.value);
+        
+        setResourceName(prevState => {
+            return (ResourceName.length > 100) ? prevState : ResourceName;
+        });
+
+        setResourceNameCount(prevState => {
+            return (ResourceName.length > 100) ? prevState : ResourceName.length;
+        })  
     }
 
     const handlerUrl = (e:any) => {
@@ -207,14 +218,13 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
     const handlerShortDescription = (e:any) => {
         let shortDescription = e.currentTarget.value;
         setNotificationError("");
-        setResourceShortDescription(prevState => {
 
-            let description = (shortDescription.length > 150) ? prevState : shortDescription;
-            return description;
+        setResourceShortDescription(prevState => {
+            return (shortDescription.length > 150) ? prevState : shortDescription;
         });
+        
         setResourceShortDescriptionCount(prevState => {
-            let count = (shortDescription.length > 150) ? prevState : shortDescription.length; 
-            return count;
+            return (shortDescription.length > 150) ? prevState : shortDescription.length; 
         });
 
         return;
@@ -230,15 +240,27 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
         setResourceTags(e.currentTarget.value);
     }
 
+    const handlerImage = (e:any) => {
+        setFileImage(e.target.files[0]);
+        setIsFile(1);
+        setFileImagePreview(URL.createObjectURL(e.target.files[0]))
+    }
+
+    const removeImage = () => {
+        setFileImagePreview(placeholder);
+        setFileImage("");
+        setIsFile(0);
+    }
+
     return(
-        <div className={(open) ? "modal is-active": 'modal'}>
+        <div className={(open) ? "modal is-active p-4": 'modal p-4'}>
             <div className="modal-background"></div>
             <div className="modal-card">
                 <header className="modal-card-head border-bottom">
                     <p className="modal-card-title">{title}</p>
                     <button className="delete" aria-label="close" onClick={() => changeOpen(false)}></button>
                 </header>
-                <section className="modal-card-body">
+                <section className="modal-card-body p-4">
                     <div className={(notificationError) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>{notificationError}</div>
                     <div className={(notificationSuccess) ? "notification has-text-white is-success" : 'notification is-success has-text-white is-hidden'}>{notificationSuccess}</div>
                     <form method='post'>
@@ -246,6 +268,7 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
                             <label className="label">Nombre de Recurso<span className="has-text-danger">*</span></label>
                             <div className="control">
                                 <input className="input" value={resourceName} onChange={(e) => handlerName(e)} type="text" placeholder="" />
+                                <span>{resourceNameCount} /100</span>
                             </div>
                         </div>
                         <div className="field mt-4">
@@ -255,14 +278,31 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
                             </div>
                         </div>
                         <div className="field mt-4">
-                            <label className="label">Descripcion Corta<span className="has-text-danger">*</span></label>
+                            <figure className="image is-5by4 border">
+                                <button type="button" onClick={() => removeImage()} className={(fileImagePreview == placeholder) ? "button is-danger is-pulled-right is-hidden" : "button is-danger is-pulled-right"} style={{zIndex:1,borderRadius:'20px',marginTop:'5px',marginRight:'5px'}}> <FontAwesomeIcon icon={faXmark} /></button>
+                                <img src={fileImagePreview} />
+                            </figure>
+                            <div className="file w-100">
+                                <label className="file-label w-100">
+                                    <input className="file-input" type="file" onChange={(e) => handlerImage(e)} name="image" />
+                                    <span className="file-cta mt-4 w-100 has-text-centered">
+                                        <span className="file-icon">
+                                            <FontAwesomeIcon icon={faUpload} />
+                                        </span>
+                                        <span className="file-label  has-text-centered">Subir imagen</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div className="field mt-4">
+                            <label className="label">Descripcion Corta</label>
                             <div className="control">
                                 <textarea className="textarea" value={resourceShortDescription} onChange={(e) => handlerShortDescription(e)} style={{resize:"none"}} placeholder=""></textarea>
                                 <span>{resourceShortDescriptionCount} /150</span>
                             </div>
                         </div>
                         <div className="field mt-4">
-                            <label className="label">Descripcion<span className="has-text-danger">*</span></label>
+                            <label className="label">Descripcion</label>
                             <div className="control">
                                 <textarea className="textarea" value={resourceDescription} onChange={(e) => handlerDescription(e)} style={{resize:"none"}} placeholder=""></textarea>
                             </div>
@@ -282,7 +322,7 @@ export default function ModalAddResource({open,title,changeOpen,titleButton,id,n
                         </div> 
 
                         <div className="field">
-                            <label className="label">Tags</label>
+                            <label className="label">Etiquetas</label>
                             <div className="control">
                                 <select id="select-tag" multiple data-type="tags" data-placeholder="Seleccionar Etiquetas" data-no-results-label="No hay resultados" value={resourceTags} onChange={(e) => handlerTags(e)}>
                                     {

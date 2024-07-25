@@ -1,6 +1,4 @@
-import placeholder from "../../assets/img/placeholder.webp";
-
-export default function ModalResourceDetails({title,open,changeModal,shortDescription,description,url}:any){
+export default function ModalResourceDetails({title,open,changeModal,shortDescription,description,url,image}:any){
 
     return(
         <div className={(open) ? "modal is-active": 'modal'}>
@@ -17,7 +15,7 @@ export default function ModalResourceDetails({title,open,changeModal,shortDescri
                         </div>
                         <div className="column is-12">
                             <figure className="image is-5by3">
-                                <img src={placeholder} />
+                                <img src={image} />
                             </figure>
                         </div>
                         <div className="column is-12 ">

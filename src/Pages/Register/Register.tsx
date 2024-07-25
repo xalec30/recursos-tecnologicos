@@ -5,6 +5,7 @@ import { faUser,faLock,faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { scrollToTop } from "../../Utils/utils";
 import { changeTitleHeader } from "../../Utils/utils";
 import codeigniter from "../../Utils/axios";
+import LicenseAgreement from "./LicenseAgreement";
 
 import Navbar from "../../Components/Navbar/Navbar"
 import Footer from "../../Components/Footer/Footer";
@@ -18,10 +19,10 @@ export default function Register(){
     const [middleName,setMiddleName] = useState("");
     const [lastName,setLastName] = useState("");
     const [email,setEmail] = useState("");
+    const [open,setOpen] = useState(false);
     const [buttonLoading,setButtonLoading] = useState(0);
     const [errorRegister,setErrorRegister] = useState<String>("");
     const [successRegister,setSuccessRegister] = useState<String>("");
-    const [licenseAgreement,setLicenseAgreement] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,12 +70,15 @@ export default function Register(){
         setErrorRegister("");
     }
 
-    const handlerLicenseAgreement = () => {
-        
-    }
-
     const closeNotification = () => {
         setErrorRegister("");
+    }
+
+    const handlerLicenseAgreement = () => {
+        console.log('paso por aqui');
+        setOpen(prevState => {
+            return !prevState;
+        })
     }
 
     const registerUser = async() => {
@@ -176,7 +180,7 @@ export default function Register(){
                             <div className="field mt-4">
                                 <label className="label">Usuario <span className="has-text-danger">*</span></label>
                                 <div className="control has-icons-left">
-                                    <input className="input" id="username" onKeyUp={(e) => handleUsername(e)} type="text" placeholder="" />
+                                    <input className="input" id="username" onChange={(e) => handleUsername(e)} max="100" type="text" placeholder="" />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faUser} />
                                     </span>
@@ -185,25 +189,25 @@ export default function Register(){
                             <div className="field mt-4">
                                 <label className="label">Nombre <span className="has-text-danger">*</span></label>
                                 <div className="control">
-                                    <input className="input" onKeyUp={(e) => handleFirstName(e)} type="text" placeholder="" />
+                                    <input className="input" onChange={(e) => handleFirstName(e)} max="100" type="text" placeholder="" />
                                 </div>
                             </div>
                             <div className="field mt-4">
                                 <label className="label">Segundo nombre (Opcional)</label>
                                 <div className="control">
-                                    <input className="input" type="text" onKeyUp={(e) => handleMiddleName(e)} placeholder="" />
+                                    <input className="input" type="text" onChange={(e) => handleMiddleName(e)} max="60" placeholder="" />
                                 </div>
                             </div>
                             <div className="field mt-4">
                                 <label className="label">Apellido <span className="has-text-danger">*</span></label>
                                 <div className="control">
-                                    <input className="input" type="text" onKeyUp={(e) => handleLastName(e)} placeholder="" />
+                                    <input className="input" type="text" onChange={(e) => handleLastName(e)} max="60" placeholder="" />
                                 </div>
                             </div>
                             <div className="field mt-4">
                                 <label className="label">Correo Electronico <span className="has-text-danger">*</span></label>
                                 <div className="control has-icons-left">
-                                    <input className="input" placeholder="" onKeyUp={(e) => handleEmail(e)} />
+                                    <input className="input" placeholder="" onChange={(e) => handleEmail(e)} max="150" />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faEnvelope} />
                                     </span>
@@ -212,7 +216,7 @@ export default function Register(){
                             <div className="field mt-4">
                                 <label className="label">Contraseña</label>
                                 <div className="control has-icons-left">
-                                    <input className="input" type="password" onKeyUp={(e) => handlePassword(e)} placeholder="" />
+                                    <input className="input" type="password" onChange={(e) => handlePassword(e)} placeholder="" />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faLock} />
                                     </span>
@@ -221,7 +225,7 @@ export default function Register(){
                             <div className="field mt-4">
                                 <label className="label">Repetir contraseña</label>
                                 <div className="control has-icons-left">
-                                    <input className="input" type="password" onKeyUp={(e) => handleRepeatPassword(e)} placeholder="" />
+                                    <input className="input" type="password" onChange={(e) => handleRepeatPassword(e)} placeholder="" />
                                     <span className="icon is-small is-left">
                                         <FontAwesomeIcon icon={faLock} />
                                     </span>
@@ -230,7 +234,7 @@ export default function Register(){
                             <div className="field mt-4">
                                 <div className="field">
                                     <input className="is-checkradio" type="checkbox" name="exampleCheckbox" />
-                                    <label><a>Accept the license agreement</a></label>
+                                    <label>Aceptar el <a onClick={() => handlerLicenseAgreement()}>acuerdo de licencia y politica de privacidad</a></label>
                                 </div>
                             </div>
                             <div className="field mt-2">
@@ -247,6 +251,7 @@ export default function Register(){
                     <section className="column is-12 p-4"></section>
                 </div>
             </div>
+            <LicenseAgreement open={open} changeOpen={handlerLicenseAgreement} />
             <Footer/>
         </>
     )

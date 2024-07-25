@@ -16,7 +16,7 @@ export default function CategoriesList(){
 
         const getCategories = async() => {
 
-            await codeigniter.get('/categories').then((response) => {
+            await codeigniter.get('/categories?page=-1').then((response) => {
                 setCategories(response.data);
             })
         }
@@ -44,7 +44,7 @@ export default function CategoriesList(){
 
                                 let name = category.name;
 
-                                return <ItemMenu key={category.id} name={category.name} href={'/category/' + name.toLowerCase()} />
+                                return <ItemMenu key={category.id} name={category.name} href={'/category/' + name} />
                             })
 
                         :

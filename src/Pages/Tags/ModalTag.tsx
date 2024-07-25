@@ -8,14 +8,17 @@ export default function ModalTag({title,open,changeOpen,titleButton,tagName,id}:
     const [notificationSuccess,setNotificationSuccess] = useState<any>("");
     const [buttonIsLoading,setButtonisLoading] = useState(false);
     const [name,setName] = useState(""); 
+    const [nameCount, setNameCount] = useState(0);
 
     useEffect(() => {
 
         if(tagName != ""){
             setName(tagName);
+            setNameCount(tagName.length);
             setTagId(id);
         }else{
             setName("");
+            setNameCount(0);
             setTagId(0);
         }
 
@@ -23,7 +26,15 @@ export default function ModalTag({title,open,changeOpen,titleButton,tagName,id}:
 
     const handlerName = (e:any) => {
         setNotificationError("");
-        setName(e.currentTarget.value);
+        let name = e.currentTarget.value;
+
+        setName(prevState => {
+            return (name.length > 100) ? prevState : name;
+        });
+
+        setNameCount(prevState => {
+            return (name.length > 100) ? prevState : name.length;
+        });
     }
 
     const updateTag = async() => {
@@ -85,21 +96,22 @@ export default function ModalTag({title,open,changeOpen,titleButton,tagName,id}:
     }
 
     return(
-        <div className={(open) ? "modal is-active": 'modal'}>
+        <div className={(open) ? "modal is-active p-4": 'modal p-4'}>
             <div className="modal-background"></div>
             <div className="modal-card">
                 <header className="modal-card-head border-bottom">
                     <p className="modal-card-title">{title}</p>
                     <button className="delete" aria-label="close" onClick={() => changeOpen(false)}></button>
                 </header>
-                <section className="modal-card-body">
+                <section className="modal-card-body p-4">
                     <div className={(notificationError) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>{notificationError}</div>
                     <div className={(notificationSuccess) ? "notification has-text-white is-success" : 'notification is-success has-text-white is-hidden'}>{notificationSuccess}</div>
                     <form method='post'>
                         <div className="field mt-4">
                             <label className="label">Nombre de Etiqueta</label>
                             <div className="control">
-                                <input className="input" type="text" onChange={(e) => handlerName(e)} defaultValue={name} placeholder="" />
+                                <input className="input" type="text" onChange={(e) => handlerName(e)} value={name} placeholder="" />
+                                <span>{nameCount} /100</span>
                             </div>
                         </div>
                     </form>

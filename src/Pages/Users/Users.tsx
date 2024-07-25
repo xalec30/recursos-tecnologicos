@@ -14,7 +14,7 @@ export default function Users(){
     const buttonsAction = useRef<any>([]);
     const theme = useTheme();
     const [users,setUsers] = useState([]);
-
+    const [page,setPage] = useState<number>(1);
     const [viewDetail,setViewDetail] = useState(false);
     const [viewDelete,setViewDelete] = useState(false);
     const [viewNotification,setNotification] = useState(false);
@@ -28,16 +28,16 @@ export default function Users(){
     const Auth = useAuth();
     const AuthUser = JSON.parse(Auth.user);
 
-    const getUsers = async() => {
+    const getUsers = async(page:number) => {
         
-        await codeigniter.get('/users').then((response) => {
+        await codeigniter.get('/users?page=' + page).then((response) => {
             setUsers(response.data);
         })
     }
 
     useEffect(() => {
         changeTitleHeader('Usuarios Registrados');
-        getUsers();
+        getUsers(page);
     },[]);
 
     const openModalView = (e:any) => {
@@ -68,7 +68,7 @@ export default function Users(){
         await codeigniter.delete('/users/' + id).then(() => {
            
             setNotification(true);
-            getUsers();
+            getUsers(page);
             setViewDelete(false);
             setTimeout(() => {
                 setNotification(false);
@@ -99,10 +99,23 @@ export default function Users(){
                 button.classList.add('is-danger');
                 button.setAttribute('data-status',1);
             })
-        }
+        }    
+    }
 
-        
-        
+    const nextPage = () => {
+        setPage(prevState => {
+            prevState += 1;
+            getUsers(prevState);
+            return prevState;
+        })
+    }
+
+    const previousPage = () => {
+        setPage(prevState => {
+            prevState -= 1;
+            getUsers(prevState);
+            return prevState;
+        })
     }
 
     return(
@@ -117,7 +130,7 @@ export default function Users(){
             </div>
             <div className="column is-12">
                 <div className="table-container rounded">
-                    <table className="table is-fullwidth rounded">
+                    <table className="table is-fullwidth is-bordered">
                         <thead>
                             <tr>
                                 <th>Usuario</th>
@@ -174,6 +187,12 @@ export default function Users(){
                             }
                         </tbody>
                     </table>
+                </div>
+            </div>
+            <div className="column is-12">
+                <div className="buttons is-justify-content-flex-end">
+                    <button className={(page > 1) ? "button is-link" : 'button is-link is-hidden'} disabled={(page == 1) ? true : false } onClick={() => previousPage()}>Anterior</button>
+                    <button className={(users.length >= 10) ? "button is-link" : 'button is-link is-hidden'} disabled={(users.length == 10 ) ? false : true} onClick={() => nextPage()}>Siguiente</button>
                 </div>
             </div>
             <ModalViewUser username={username} firstName={firstName} middleName={middleName} lastName={lastName} email={email} open={viewDetail} changeOpen={closeModalView}/>

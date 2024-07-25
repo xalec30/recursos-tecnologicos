@@ -92,9 +92,10 @@ export default function Roles(){
             <div className="column is-12">
                 <div className={(viewNotification) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>Categoria Eliminada</div>
             </div>
+            
             <div className="column is-12">
                 <div className="table-container rounded">
-                    <table className="table is-fullwidth rounded">
+                    <table className="table is-fullwidth is-bordered">
                         <thead>
                             <tr>
                                 <th>Nombre</th>

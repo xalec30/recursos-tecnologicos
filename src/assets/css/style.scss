@@ -7,6 +7,18 @@ body{
     border-bottom: 1px solid #f3f4f6;
 }
 
+.border{
+    border: 1px solid #f3f4f6;
+}
+
+.table{
+    border: 1px solid #f3f4f6;
+}
+
+.search{
+    background-color: #f3f4f6;
+}
+
 html[data-theme=dark]{
 
     .border-bottom{
@@ -15,6 +27,14 @@ html[data-theme=dark]{
 
     .border-right{
         border-right: 1px solid #f3f4f626 !important;
+    }
+
+    .border{
+        border: 1px solid #f3f4f626 !important
+    }
+
+    .table{
+        border: 1px solid #353a46 !important;
     }
 
     .separator{
@@ -56,6 +76,9 @@ html[data-theme=dark]{
         }
     }
   
+    .search{
+        background-color: #2e333d ;
+    }
 }
 
 .border-right{
@@ -161,4 +184,16 @@ td{
 .is-position-right{
     position: absolute;
     right: 15px;
+}
+
+.card{
+    border: 2px solid #e5e7eb;
+
+    &:hover{
+        border: 2px solid #4258ff;
+        animation-timeline: --assetCards;
+        animation-name: show;
+        animation-fill-mode: both;
+        animation-range: entry 5% cover 30%
+    }
 }

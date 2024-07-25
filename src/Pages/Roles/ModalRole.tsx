@@ -8,6 +8,7 @@ export default function ModalRole({open,title,changeOpen,titleButton,name,capabi
     const [notificationSuccess,setNotificationSuccess] = useState<any>("");
     const [buttonIsLoading,setButtonisLoading] = useState(false);
     const [rolName,setRolName] = useState("");
+    const [rolNameCount,setRolNameCount] = useState(0);
     const [capabilities,setCapabilities] = useState([]);
 
     const getCapabilities = async() => {
@@ -26,6 +27,7 @@ export default function ModalRole({open,title,changeOpen,titleButton,name,capabi
 
             setRolName("");
             setRolId(0);
+            setRolNameCount(0);
 
             document.querySelectorAll('.capabilitie').forEach((cap:any) => {
                 cap.checked = false;
@@ -35,6 +37,7 @@ export default function ModalRole({open,title,changeOpen,titleButton,name,capabi
            
             setRolName(name);
             setRolId(id);
+            setRolNameCount(name);
 
             document.querySelectorAll('.capabilitie').forEach((cap:any) => {
     
@@ -50,7 +53,17 @@ export default function ModalRole({open,title,changeOpen,titleButton,name,capabi
     },[name]);
 
     const handlerName = (e:any) => {
-        setRolName(e.currentTarget.value);
+        let name = e.currentTarget.value;
+
+
+        setRolName(prevState => {
+            return (name.length > 100) ? prevState : name;
+        });
+
+        setRolNameCount(prevState => {
+            return (name.length > 100) ? prevState : name.length;
+        })
+
         setNotificationError("");
     }
 
@@ -138,21 +151,22 @@ export default function ModalRole({open,title,changeOpen,titleButton,name,capabi
     }
 
     return(
-        <div className={(open) ? "modal is-active": 'modal'}>
+        <div className={(open) ? "modal is-active p-4": 'modal p-4'}>
             <div className="modal-background"></div>
             <div className="modal-card">
                 <header className="modal-card-head border-bottom">
                     <p className="modal-card-title">{title}</p>
                     <button className="delete" aria-label="close" onClick={() => changeOpen(false)}></button>
                 </header>
-                <section className="modal-card-body">
+                <section className="modal-card-body p-4">
                     <div className={(notificationError) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>{notificationError}</div>
                     <div className={(notificationSuccess) ? "notification has-text-white is-success" : 'notification is-success has-text-white is-hidden'}>{notificationSuccess}</div>
                     <form method='post'>
                         <div className="field mt-4">
                             <label className="label">Nombre de Rol <span className="has-text-danger">*</span></label>
                             <div className="control">
-                                <input className="input" onKeyUp={(e) => handlerName(e)} defaultValue={rolName} type="text" placeholder="" />
+                                <input className="input" onChange={(e) => handlerName(e)} value={rolName} type="text" placeholder="" />
+                                <span>{rolNameCount} /100</span>
                             </div>
                         </div>
                         <div className="field mt-4">

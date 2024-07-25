@@ -7,11 +7,29 @@ body {
   border-bottom: 1px solid #f3f4f6;
 }
 
+.border {
+  border: 1px solid #f3f4f6;
+}
+
+.table {
+  border: 1px solid #f3f4f6;
+}
+
+.search {
+  background-color: #f3f4f6;
+}
+
 html[data-theme=dark] .border-bottom {
   border-bottom: 1px solid rgba(243, 244, 246, 0.1490196078) !important;
 }
 html[data-theme=dark] .border-right {
   border-right: 1px solid rgba(243, 244, 246, 0.1490196078) !important;
+}
+html[data-theme=dark] .border {
+  border: 1px solid rgba(243, 244, 246, 0.1490196078) !important;
+}
+html[data-theme=dark] .table {
+  border: 1px solid #353a46 !important;
 }
 html[data-theme=dark] .separator .separator-text {
   display: block;
@@ -45,6 +63,9 @@ html[data-theme=dark] .tags-input .dropdown-content .dropdown-item {
 }
 html[data-theme=dark] .tags-input .dropdown-content .dropdown-item:hover {
   background-color: #14161a !important;
+}
+html[data-theme=dark] .search {
+  background-color: #2e333d;
 }
 
 .border-right {
@@ -143,4 +164,15 @@ td {
 .is-position-right {
   position: absolute;
   right: 15px;
+}
+
+.card {
+  border: 2px solid #e5e7eb;
+}
+.card:hover {
+  border: 2px solid #4258ff;
+  animation-timeline: --assetCards;
+  animation-name: show;
+  animation-fill-mode: both;
+  animation-range: entry 5% cover 30%;
 }/*# sourceMappingURL=style.css.map */

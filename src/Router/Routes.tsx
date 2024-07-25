@@ -20,6 +20,8 @@ import Roles from "../Pages/Roles/Roles";
 import Resource from "../Pages/Resources/Resource";
 import NotFound from "../Pages/NotFound/NotFound";
 import Overview from "../Pages/Overview/Overview";
+import Favorites from "../Pages/Favorites/Favorites";
+import Search from "../Pages/Search/Search";
 
 const router = createBrowserRouter([
     {
@@ -39,6 +41,10 @@ const router = createBrowserRouter([
     {
         path: '/about',
         element: <About/>
+    },
+    {
+        path: '/search/:search',
+        element: <Search/>
     },
     {
         path:'/account/',
@@ -66,6 +72,10 @@ const router = createBrowserRouter([
                 path:'profile',
                 element: <Profile/>
             },
+            {
+                path:'favorites',
+                element: <Favorites/>
+            }
         ]
     },
     {

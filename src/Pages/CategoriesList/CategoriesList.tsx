@@ -11,6 +11,7 @@ import ModalDelete from "../../Components/ModalDelete/ModalDelete";
 export default function CategoriesList(){
 
     const theme = useTheme();
+    const [page,setPage] = useState<number>(1);
     const [categories,setCategories] = useState([]);
     const [titleModal,setTitleModal] = useState("");
     const [titleButton,setTitleButton] = useState("");
@@ -22,15 +23,15 @@ export default function CategoriesList(){
     const [isHidden,setisHidden] = useState(0);
     const [isNew,setIsNew] = useState(0);
 
-    const getCategories = async() => {
-        await codeigniter.get('/categories').then((response) => {
+    const getCategories = async(page:any) => {
+        await codeigniter.get('/categories?page=' + page).then((response) => {
             setCategories(response.data);
         })
     }
 
     useEffect(() => {
         changeTitleHeader('Categorias');
-        getCategories();
+        getCategories(page);
     },[]);
 
     const openModalAddCategory = () => {
@@ -65,7 +66,7 @@ export default function CategoriesList(){
     const deleteCategory = async(id:number) => {
 
         await codeigniter.delete('/categories/' + id).then(() => {
-            getCategories();
+            getCategories(page);
             setNotification(true);
             setViewDelete(false);
             setTimeout(() => {
@@ -76,6 +77,22 @@ export default function CategoriesList(){
 
     const closeModalDelete = () => {
         setViewDelete(false);
+    }
+
+    const nextPage = () => {
+        setPage(prevState => {
+            prevState += 1;
+            getCategories(prevState);
+            return prevState;
+        })
+    }
+
+    const previousPage = () => {
+        setPage(prevState => {
+            prevState -= 1;
+            getCategories(prevState);
+            return prevState;
+        })
     }
 
     return(
@@ -92,7 +109,11 @@ export default function CategoriesList(){
                 <div className={(viewNotification) ? "notification has-text-white is-danger" : 'notification is-danger has-text-white is-hidden'}>Categoria Eliminada</div>
             </div>
             <div className="column is-12">
-                <table className="table is-fullwidth rounded">
+                <span>Pagina {page}</span>
+            </div>
+        
+            <div className="column is-12">
+                <table className="table is-fullwidth is-bordered">
                     <thead>
                         <tr>
                             <th>Nombre</th>
@@ -101,13 +122,15 @@ export default function CategoriesList(){
                     </thead>
                     <tbody>
                         {
+                             
                             (categories.length > 0) ? 
+                               
 
                                 categories.map((category:any) => {
 
                                     return(
                                         <tr key={category.id} id={'category_' + category.id}>
-                                            <th style={{alignContent:'center'}}>{category.name}</th>
+                                            <td style={{alignContent:'center'}}>{category.name}</td>
                                             <td>
                                                 <button className="button is-success m-1 has-text-white" data-id={category.id} data-name={category.name} data-new={category.is_new} data-hidden={category.hidden} onClick={(e) => openModalUpdateCategory(e)}>
                                                     <FontAwesomeIcon icon={faPenToSquare} />
@@ -127,6 +150,12 @@ export default function CategoriesList(){
                         }
                     </tbody>
                 </table>
+            </div>
+            <div className="column is-12">
+                <div className="buttons is-justify-content-flex-end">
+                    <button className={(page > 1) ? "button is-link" : 'button is-link is-hidden'} disabled={(page == 1) ? true : false } onClick={() => previousPage()}>Anterior</button>
+                    <button className={(categories.length >= 10) ? "button is-link" : 'button is-link is-hidden'} disabled={(categories.length == 10 ) ? false : true} onClick={() => nextPage()}>Siguiente</button>
+                </div>
             </div>
             <ModalCategory titleButton={titleButton} id={id} title={titleModal} name={categoryName} newCategory={isNew} hidden={isHidden} open={openModal} changeOpen={closeModal} />
             <ModalDelete open={viewDelete} deleteFunction ={deleteCategory} changeOpen={closeModalDelete} title="Eliminar Categoria" id={id} description="Desea eliminar esta categoria?" />
