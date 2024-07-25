@@ -1,7 +1,6 @@
 import placeholder from "../../assets/img/placeholder.webp";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from "react";
 
 export default function CardResource({eventModal,name,shortDescription,description,url,image}:any){
